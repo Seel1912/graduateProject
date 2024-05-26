@@ -31,11 +31,11 @@ const NursingHomeAgeChart = () => {
           type: 'pie',
           radius: '50%',
           data: [
-            { value: 5, name: '<50' },
-            { value: 15, name: '50-60' },
-            { value: 12, name: '60-70' },
-            { value: 23, name: '70-80' },
-            { value: 10, name: '80-90' },
+            { value: 5, name: '<50 Age' },
+            { value: 15, name: '50-60 Age' },
+            { value: 12, name: '60-70 Age' },
+            { value: 23, name: '70-80 Age' },
+            { value: 10, name: '80-90 Age' },
           ],
           emphasis: {
             itemStyle: {
@@ -274,7 +274,7 @@ const Dashboard = () => {
                 fontWeight: 700,
                 color: 'rgb(61, 61, 78)',
               }}>
-              40
+              10
             </p>
             <div className="increase" style={{ display: 'flex' }}>
               <RiseOutlined
@@ -366,7 +366,7 @@ const Dashboard = () => {
                 fontWeight: 700,
                 color: 'rgb(61, 61, 78)',
               }}>
-              12 days
+              12 months
             </p>
             <div className="increase" style={{ display: 'flex' }}>
               <RiseOutlined
