@@ -10,6 +10,8 @@ import {
   InputNumber,
   Select,
   DatePicker,
+  Row,
+  Col,
 } from 'antd';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
@@ -22,7 +24,7 @@ const OldPeople = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingKey, setEditingKey] = useState('');
   const [form] = Form.useForm();
-  const [filterOption, setFilterOption] = useState('All');
+  const [filterOption, setFilterOption] = useState('Tất cả');
   const [startDate, setStartDate] = useState(null);
   const navigate = useNavigate();
 
@@ -84,7 +86,7 @@ const OldPeople = () => {
 
   const handleFilterChange = (value) => {
     setFilterOption(value);
-    if (value === 'All') {
+    if (value === 'Tất cả') {
       setFilteredData([]);
     } else {
       const filtered = data.filter((item) => item.health === value);
@@ -102,7 +104,7 @@ const OldPeople = () => {
 
   const columns = [
     {
-      title: 'Name',
+      title: 'Tên',
       dataIndex: 'name',
       key: 'name',
       width: 200,
@@ -111,36 +113,42 @@ const OldPeople = () => {
       ),
     },
     {
-      title: 'Age',
+      title: 'Tuổi',
       dataIndex: 'age',
       key: 'age',
       width: 100,
     },
     {
-      title: 'Address',
+      title: 'Điều Dưỡng Chăm Sóc',
+      dataIndex: 'nurse',
+      key: 'nurse',
+      width: 200,
+    },
+    {
+      title: 'Địa chỉ',
       dataIndex: 'address',
       key: 'address',
       width: 400,
     },
     {
-      title: 'Health',
+      title: 'Sức khỏe',
       key: 'health',
       dataIndex: 'health',
-      width: 200,
+      width: 100,
       render: (health) => (
-        <Tag color={health === 'Good' ? 'success' : 'volcano'} key={health}>
+        <Tag color={health === 'Tốt' ? 'success' : 'volcano'} key={health}>
           {health}
         </Tag>
       ),
     },
     {
-      title: 'Room',
+      title: 'Phòng',
       key: 'room',
       dataIndex: 'room',
       width: 200,
     },
     {
-      title: 'Start Date',
+      title: 'Ngày vào',
       key: 'startDate',
       dataIndex: 'startDate',
       render: (startDate) => {
@@ -151,12 +159,12 @@ const OldPeople = () => {
       },
     },
     {
-      title: 'Action',
+      title: 'Hành động',
       key: 'action',
       render: (_, record) => (
         <Space size="middle">
-          <a onClick={() => handleEdit(record)}>Edit</a>
-          <a onClick={() => handleDelete(record.key)}>Delete</a>
+          <a onClick={() => handleEdit(record)}>Sửa</a>
+          <a onClick={() => handleDelete(record.key)}>Xóa</a>
         </Space>
       ),
     },
@@ -174,15 +182,15 @@ const OldPeople = () => {
           type="primary"
           onClick={handleAdd}
           style={{ marginBottom: 16, marginRight: 16 }}>
-          Add Patient
+          Thêm người cao tuổi
         </Button>
         <Select
           value={filterOption}
           onChange={handleFilterChange}
           style={{ marginBottom: 16, width: 200 }}>
-          <Option value="All">Show All</Option>
-          <Option value="Good">Filter Good Health</Option>
-          <Option value="Not Good">Filter Not Good Health</Option>
+          <Option value="Tất cả">Hiển thị tất cả</Option>
+          <Option value="Tốt">Lọc sức khỏe tốt</Option>
+          <Option value="Không tốt">Lọc sức khỏe không tốt</Option>
         </Select>
       </div>
       <Table
@@ -191,57 +199,172 @@ const OldPeople = () => {
       />
 
       <Modal
-        title="Add/Edit Person"
+        title="Thêm/Sửa Người Cao Tuổi"
         visible={isModalVisible}
         onOk={handleSave}
-        onCancel={handleCancel}>
+        onCancel={handleCancel}
+        width={1000}>
         <Form form={form} layout="vertical" name="form_in_modal">
-          <Form.Item
-            name="name"
-            label="Name"
-            rules={[{ required: true, message: 'Please input the name!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="age"
-            label="Age"
-            rules={[{ required: true, message: 'Please input the age!' }]}>
-            <InputNumber min={1} />
-          </Form.Item>
-          <Form.Item
-            name="address"
-            label="Address"
-            rules={[{ required: true, message: 'Please input the address!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="health"
-            label="Health"
-            rules={[
-              {
-                required: true,
-                message: 'Please select the health status!',
-              },
-            ]}>
-            <Select>
-              <Option value="Good">Good</Option>
-              <Option value="Not Good">Not Good</Option>
-            </Select>
-          </Form.Item>
-          <Form.Item
-            name="room"
-            label="Room"
-            rules={[{ required: true, message: 'Please input the room!' }]}>
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="startDate"
-            label="Start Date"
-            rules={[
-              { required: true, message: 'Please select the start date!' },
-            ]}>
-            <DatePicker onChange={handleDatePickerChange} />
-          </Form.Item>
+          <Row gutter={16}>
+            {/* Cột 1: Thông tin của người cao tuổi */}
+            <Col span={8}>
+              <Form.Item
+                name="name"
+                label="Tên"
+                rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="age"
+                label="Tuổi"
+                rules={[{ required: true, message: 'Vui lòng nhập tuổi!' }]}>
+                <InputNumber min={1} />
+              </Form.Item>
+              <Form.Item
+                name="address"
+                label="Địa chỉ"
+                rules={[{ required: true, message: 'Vui lòng nhập địa chỉ!' }]}>
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="health"
+                label="Sức khỏe"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng chọn tình trạng sức khỏe!',
+                  },
+                ]}>
+                <Select>
+                  <Option value="Tốt">Tốt</Option>
+                  <Option value="Không tốt">Không tốt</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item
+                name="room"
+                label="Phòng"
+                rules={[{ required: true, message: 'Vui lòng chọn phòng!' }]}>
+                <Select>
+                  {['A', 'B', 'C'].map((block) =>
+                    Array.from({ length: 5 }, (_, i) => (
+                      <Option
+                        key={`${block}${i + 1}`}
+                        value={`${block}${i + 1}`}>
+                        {`${block}${i + 1}`}
+                      </Option>
+                    ))
+                  )}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                name="startDate"
+                label="Ngày vào"
+                rules={[
+                  { required: true, message: 'Vui lòng chọn ngày vào!' },
+                ]}>
+                <DatePicker onChange={handleDatePickerChange} />
+              </Form.Item>
+              <Form.Item
+                name="hometown"
+                label="Quê quán"
+                rules={[
+                  { required: true, message: 'Vui lòng nhập quê quán!' },
+                ]}>
+                <Input />
+              </Form.Item>
+            </Col>
+            {/* Cột 2: Thông tin bổ sung về người cao tuổi */}
+            <Col span={8}>
+              <Form.Item
+                name="medicalHistory"
+                label="Bệnh nền"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập thông tin bệnh nền!',
+                  },
+                ]}>
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="heartRate"
+                label="Nhịp tim trung bình"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập chỉ số nhịp tim trung bình!',
+                  },
+                ]}>
+                <InputNumber />
+              </Form.Item>
+              <Form.Item
+                name="oxygenLevel"
+                label="Nồng độ oxi trong máu"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập nồng độ oxi trong máu!',
+                  },
+                ]}>
+                <InputNumber />
+              </Form.Item>
+              <Form.Item
+                name="nurse"
+                label="Người điều dưỡng"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập tên người điều dưỡng!',
+                  },
+                ]}>
+                <Input />
+              </Form.Item>
+            </Col>
+            {/* Cột 3: Thông tin của người thân */}
+            <Col span={8}>
+              <Form.Item
+                name="relativeName"
+                label="Tên người thân"
+                rules={[
+                  { required: true, message: 'Vui lòng nhập tên người thân!' },
+                ]}>
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="phoneNumber"
+                label="Số điện thoại của người thân"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập số điện thoại của người thân!',
+                  },
+                ]}>
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="relativeAddress"
+                label="Địa chỉ nhà của người thân"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập địa chỉ nhà của người thân!',
+                  },
+                ]}>
+                <Input />
+              </Form.Item>
+              <Form.Item
+                name="relationship"
+                label="Mối quan hệ với người cao tuổi"
+                rules={[
+                  {
+                    required: true,
+                    message: 'Vui lòng nhập mối quan hệ với người cao tuổi!',
+                  },
+                ]}>
+                <Input />
+              </Form.Item>
+            </Col>
+          </Row>
         </Form>
       </Modal>
     </>
