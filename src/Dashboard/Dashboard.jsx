@@ -1,4 +1,4 @@
-import { Select } from 'antd';
+import { Select, Menu } from 'antd';
 import {
   UserOutlined,
   RiseOutlined,
@@ -8,7 +8,7 @@ import {
 import ReactECharts from 'echarts-for-react';
 import * as echarts from 'echarts';
 import React, { useEffect, useState } from 'react';
-
+import { NavLink } from 'react-router-dom';
 const NursingHomeAgeChart = ({ dataAge }) => {
   const [ageCounts, setAgeCounts] = useState({
     '<50 tuổi': 0,
@@ -58,7 +58,7 @@ const NursingHomeAgeChart = ({ dataAge }) => {
       },
       legend: {
         orient: 'vertical',
-        left: 'right',
+        left: 'left',
       },
       series: [
         {
@@ -247,6 +247,7 @@ const Dashboard = () => {
   const [filterOldPeopleInRoom, setFilterOldPeopleInroom] = useState(0);
   const [selectedRoom, setSelectedRoom] = useState('Tất cả');
   const [filteredData, setFilteredData] = useState([]);
+  const [selectedKey, setSelectedKey] = useState('');
 
   useEffect(() => {
     const savedData = localStorage.getItem('oldPeopleData');
@@ -282,52 +283,57 @@ const Dashboard = () => {
           borderRadius: '10px',
           backgroundColor: 'white',
           margin: '15px',
-          display: 'flex',
-          justifyContent: 'space-between',
+          width: '97%',
         }}>
-        <div className="header-option1">
-          <p style={{ fontWeight: 700, color: '#3D3D4E' }}>Nhà dưỡng lão</p>
-          <Select
-            defaultValue="Đà Nẵng"
-            style={{
-              width: 200,
-            }}
-            onChange={handleChange}
-            options={[
-              {
-                value: 'Đà Nẵng',
-                label: 'Đà Nẵng',
-              },
-            ]}
-          />
-        </div>
-        <div className="header-option1">
-          <p style={{ fontWeight: 700, color: '#3D3D4E' }}>Phòng</p>
-          <Select
-            defaultValue="Tất cả"
-            style={{
-              width: 200,
-            }}
-            onChange={handleRoomChange}
-            options={[
-              { value: 'Tất cả', label: 'Tất cả' },
-              { value: 'A1', label: 'A1' },
-              { value: 'A2', label: 'A2' },
-              { value: 'A3', label: 'A3' },
-              { value: 'A4', label: 'A4' },
-              { value: 'A5', label: 'A5' },
-              { value: 'B1', label: 'B1' },
-              { value: 'B2', label: 'B2' },
-              { value: 'B3', label: 'B3' },
-              { value: 'B4', label: 'B4' },
-              { value: 'B5', label: 'B5' },
-              { value: 'C1', label: 'C1' },
-              { value: 'C2', label: 'C2' },
-              { value: 'C3', label: 'C3' },
-              { value: 'C4', label: 'C4' },
-              { value: 'C5', label: 'C5' },
-            ]}
-          />
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+          }}>
+          <div className="header-option1">
+            <p style={{ fontWeight: 700, color: '#3D3D4E' }}>Nhà dưỡng lão</p>
+            <Select
+              defaultValue="Đà Nẵng"
+              style={{
+                width: 200,
+              }}
+              onChange={handleChange}
+              options={[
+                {
+                  value: 'Đà Nẵng',
+                  label: 'Đà Nẵng',
+                },
+              ]}
+            />
+          </div>
+          <div className="header-option1">
+            <p style={{ fontWeight: 700, color: '#3D3D4E' }}>Phòng</p>
+            <Select
+              defaultValue="Tất cả"
+              style={{
+                width: 200,
+              }}
+              onChange={handleRoomChange}
+              options={[
+                { value: 'Tất cả', label: 'Tất cả' },
+                { value: 'A1', label: 'A1' },
+                { value: 'A2', label: 'A2' },
+                { value: 'A3', label: 'A3' },
+                { value: 'A4', label: 'A4' },
+                { value: 'A5', label: 'A5' },
+                { value: 'B1', label: 'B1' },
+                { value: 'B2', label: 'B2' },
+                { value: 'B3', label: 'B3' },
+                { value: 'B4', label: 'B4' },
+                { value: 'B5', label: 'B5' },
+                { value: 'C1', label: 'C1' },
+                { value: 'C2', label: 'C2' },
+                { value: 'C3', label: 'C3' },
+                { value: 'C4', label: 'C4' },
+                { value: 'C5', label: 'C5' },
+              ]}
+            />
+          </div>
         </div>
       </div>
       <div
@@ -337,7 +343,8 @@ const Dashboard = () => {
           gap: '20px',
           display: 'flex',
           justifyContent: 'space-between',
-          marginRight: 42,
+          marginRight: 32,
+          padding: '0px 3px',
         }}>
         <CardItem
           icon={<UserOutlined style={{ fontSize: '24px' }} />}
@@ -363,14 +370,21 @@ const Dashboard = () => {
           value="5"
         />
       </div>
-      <div className="footer--dashboard" style={{ display: 'flex' }}>
+      <div
+        className="footer--dashboard"
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          maxWidth: '99%',
+          padding: '0px 20px',
+        }}>
         <div
           style={{
             padding: '10px',
             borderRadius: '10px',
             backgroundColor: 'white',
-            width: '47.5%',
-            marginLeft: '15px',
+            width: '44%',
+            // marginLeft: '15px',
           }}>
           <ChartComponent data={filteredData} />
         </div>
@@ -379,8 +393,8 @@ const Dashboard = () => {
             padding: '10px',
             borderRadius: '10px',
             backgroundColor: 'white',
-            width: '47.5%',
-            marginLeft: '20px',
+            width: '43%',
+            // marginLeft: '20px',
           }}>
           <NursingHomeAgeChart dataAge={filteredData} />
         </div>

@@ -70,7 +70,7 @@ button:focus-visible {
   color: red;
 }
 .container {
-  width: 100vw;
+  width: 98vw;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -93,3 +93,5 @@ p{
   color: #78808D;
   font-family: 'Mona Sans', sans-serif;
 }
+
+

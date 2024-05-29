@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { Card, Space, Image } from 'antd';
 import moment from 'moment';
 import ReactEcharts from 'echarts-for-react';
+import image1 from '.././assets/unnamed.jpg';
 const HeartRateChart = ({ data, avgHeartRate }) => {
   const getOption = () => {
     return {
@@ -142,18 +143,18 @@ const OldPeopleDetail = ({ sensor1Data }) => {
     <div
       style={{
         padding: '20px',
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr',
+        // display: 'grid',
+        // gridTemplateColumns: '1fr 1fr',
         gap: '20px',
+        height: 'auto',
+        display: 'flex',
+        justifyContent: 'center',
       }}>
       <Card
         title={`Thông tin chi tiết của ${hehe.name}`}
-        style={{ width: 650 }}>
+        style={{ width: 700 }}>
         <Space direction="vertical" size="large">
-          <Image
-            width={200}
-            src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png"
-          />
+          <Image width={100} src={image1} />
           <div>
             <p>
               <strong>Tên người cao tuổi:</strong> {hehe.name}
@@ -206,7 +207,7 @@ const OldPeopleDetail = ({ sensor1Data }) => {
       </Card>
 
       {hehe.health == 'Không tốt' && (
-        <Card className="Haha" style={{ width: 650 }}>
+        <Card className="Haha" style={{ width: 700 }}>
           <div>
             <h2>Biểu đồ nhịp tim trong 15 ngày qua</h2>
             <HeartRateChart data={data} avgHeartRate={avgHeartRate} />
