@@ -102,7 +102,8 @@ const OxygenLevelChart = ({ data, avgOxygenLevel }) => {
   );
 };
 
-const OldPeopleDetail = () => {
+const OldPeopleDetail = ({ sensor1Data }) => {
+  console.log(sensor1Data, 'kakakak');
   const location = useLocation();
   const { record } = location.state || {};
   const [hehe, setHehe] = useState({});
@@ -123,6 +124,7 @@ const OldPeopleDetail = () => {
     { date: '2024-05-14', heartRate: 73, oxygenLevel: 97 },
     { date: '2024-05-15', heartRate: 72, oxygenLevel: 96 },
   ];
+  console.log(hehe);
   const [avgHeartRate, setAvgHeartRate] = useState(0);
   const [avgOxygenLevel, setAvgOxygenLevel] = useState(0);
   useEffect(() => {
@@ -144,7 +146,9 @@ const OldPeopleDetail = () => {
         gridTemplateColumns: '1fr 1fr',
         gap: '20px',
       }}>
-      <Card title={`Thông tin chi tiết của ${hehe.name}`}>
+      <Card
+        title={`Thông tin chi tiết của ${hehe.name}`}
+        style={{ width: 650 }}>
         <Space direction="vertical" size="large">
           <Image
             width={200}
@@ -160,7 +164,7 @@ const OldPeopleDetail = () => {
             <p>
               <strong>Địa chỉ nhà:</strong> {hehe.address}
             </p>
-            <p>
+            <p style={{ color: hehe.health === 'Không tốt' ? 'red' : 'green' }}>
               <strong>Hiện trạng sức khỏe:</strong> {hehe.health}
             </p>
             <p>
@@ -182,6 +186,15 @@ const OldPeopleDetail = () => {
             <p>
               <strong>Người chăm sóc:</strong> {hehe.nurse}
             </p>
+            {hehe.sensor == 'sensordata1' && (
+              <p style={{ color: sensor1Data.Oxy < 90 ? 'red' : 'green' }}>
+                <strong>
+                  Nồng độ oxi trong máu hiện tai: {sensor1Data.Oxy.toFixed(2)}{' '}
+                  SpO2{' '}
+                </strong>
+              </p>
+            )}
+
             <p>
               <strong>Ngày vào viện:</strong>{' '}
               {hehe.startDate
@@ -193,7 +206,7 @@ const OldPeopleDetail = () => {
       </Card>
 
       {hehe.health == 'Không tốt' && (
-        <Card className="Haha" style={{ width: 700 }}>
+        <Card className="Haha" style={{ width: 650 }}>
           <div>
             <h2>Biểu đồ nhịp tim trong 15 ngày qua</h2>
             <HeartRateChart data={data} avgHeartRate={avgHeartRate} />

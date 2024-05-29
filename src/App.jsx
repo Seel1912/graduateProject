@@ -6,6 +6,7 @@ import {
   NavLink,
   useLocation,
   useNavigate,
+  Navigate,
 } from 'react-router-dom';
 import './index.css';
 import { Layout, Menu, notification } from 'antd';
@@ -19,18 +20,23 @@ import icon from './assets/icon.png';
 const { Header, Sider, Content } = Layout;
 import './assets/MonaSans-Regular.ttf';
 import io from 'socket.io-client';
+import DoctorDetail from './DoctorDetail/DoctorDetail';
+import Nurse from './Nurse/Nurse';
+
 const socket = io('http://localhost:3001', {
   transports: ['websocket'],
   cors: { origin: 'http://localhost:5173', methods: ['GET', 'POST'] },
 });
+
 const App = () => {
   const [sensorData, setSensorData] = useState({
     sensor1: { temperature: 0, Oxy: 0 },
   });
+  const [sensor1Data, setSensor1Data] = useState({ temperature: 0, Oxy: 0 });
 
   useEffect(() => {
     socket.on('sensorData', (data) => {
-      setSensorData(data); // This updates the state with the new data
+      setSensorData(data);
     });
 
     return () => {
@@ -39,8 +45,13 @@ const App = () => {
   }, []);
 
   useEffect(() => {
-    console.log('Updated sensor data:', sensorData.sensor1.Oxy.toFixed(2));
+    setSensor1Data(sensorData.sensor1);
   }, [sensorData]);
+
+  useEffect(() => {
+    console.log('Updated sensor data:', sensor1Data.Oxy.toFixed(2));
+  }, [sensor1Data]);
+
   let emergencyData = sensorData.sensor1.Oxy.toFixed(2);
 
   const location = useLocation();
@@ -56,15 +67,15 @@ const App = () => {
     hour12: true,
   });
 
-  const showNotification = () => {
+  const showNotification = (emergencyData) => {
     notification.error({
       message: 'Alert',
-      description: 'Bệnh nhân ABCXYZ đang có vấn đề về tim',
+      description: `Bệnh nhân Nguyễn Văn A đang có vấn đề về tim\nNhịp tim hiện tại: ${emergencyData}`,
       placement: 'topRight',
       duration: 0,
       style: {
-        backgroundColor: '#ff4d4f', // Red background
-        color: '#fff', // White text
+        backgroundColor: '#ff4d4f',
+        color: '#fff',
       },
     });
   };
@@ -84,11 +95,13 @@ const App = () => {
       setSelectedKey('/dashboard');
     }
   }, [navigate]);
-  useEffect(() => {
-    if (emergencyData < 90) {
-      showNotification();
-    }
-  }, [emergencyData]);
+
+  // useEffect(() => {
+  //   if (emergencyData < 93) {
+  //     showNotification(emergencyData);
+  //   }
+  // }, [emergencyData]);
+
   return (
     <div className="container">
       <Layout>
@@ -110,6 +123,9 @@ const App = () => {
               </Menu.Item>
               <Menu.Item key="/doctor">
                 <NavLink to="/doctor">Bác sĩ</NavLink>
+              </Menu.Item>
+              <Menu.Item key="/nurse">
+                <NavLink to="/nurse">Điều Dưỡng</NavLink>
               </Menu.Item>
               <Menu.Item key="/oldpeople">
                 <NavLink to="/oldpeople">Người cao tuổi</NavLink>
@@ -136,18 +152,6 @@ const App = () => {
               <p style={{ fontFamily: 'Mona Sans, sans-serif', margin: 0 }}>
                 Dữ liệu làm mới lúc {formattedTime}
               </p>
-              <div style={{ display: 'flex' }}>
-                <p
-                  style={{
-                    fontFamily: 'Mona Sans, sans-serif',
-                    margin: 0,
-                    marginRight: 10,
-                    fontWeight: 700,
-                  }}>
-                  Bộ lọc tổng quan
-                </p>
-                <DownOutlined />
-              </div>
               <div
                 style={{
                   display: 'flex',
@@ -166,8 +170,16 @@ const App = () => {
             <Routes>
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/doctor" element={<Doctor />} />
-              <Route path="/oldpeople" element={<OldPeople />} />
-              <Route path="/oldpeople/:key" element={<OldPeopleDetail />} />
+              <Route path="/nurse" element={<Nurse />} />
+              <Route path="/doctors/:key" element={<DoctorDetail />} />
+              <Route
+                path="/oldpeople"
+                element={<OldPeople sensor1Data={sensor1Data} />}
+              />
+              <Route
+                path="/oldpeople/:key"
+                element={<OldPeopleDetail sensor1Data={sensor1Data} />}
+              />
             </Routes>
           </Content>
         </Layout>
@@ -179,6 +191,7 @@ const App = () => {
 const AppWrapper = () => (
   <Router>
     <Routes>
+      <Route path="/" element={<Navigate to="/dashboard" />} />
       <Route path="*" element={<App />} />
     </Routes>
   </Router>

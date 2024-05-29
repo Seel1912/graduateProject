@@ -93,21 +93,41 @@ const NursingHomeAgeChart = ({ dataAge }) => {
       style={{ width: '100%', height: '400px' }}></div>
   );
 };
-
+const generateRandomData = () => {
+  const randomData = [];
+  for (let i = 0; i < 7; i++) {
+    randomData.push(Math.floor(Math.random() * 10) + 1); // Giá trị ngẫu nhiên từ 1 đến 10
+  }
+  return randomData;
+};
 const ChartComponent = ({ data }) => {
   const [chartData, setChartData] = useState();
 
   useEffect(() => {
     if (data && data.length > 0) {
-      const Boarding = data.map((item) => item.Boarding);
-      const outpatient = data.map((item) => item.outpatient);
-      setChartData({ Boarding, outpatient });
-    } else {
-      // Nếu không có dữ liệu mới, sử dụng dữ liệu mặc định
-      setChartData({
-        Boarding: [1, 2, 1, 2, 1, 2, 4],
-        outpatient: [1, 2, 1, 3, 7, 4, 5],
+      const months = [
+        'Tháng 11',
+        'Tháng 12',
+        'Tháng 1',
+        'Tháng 2',
+        'Tháng 3',
+        'Tháng 4',
+        'Tháng 5',
+      ];
+      const goodHealth = Array(7).fill(0);
+      const notGoodHealth = Array(7).fill(0);
+
+      data.forEach((item) => {
+        const startMonth = new Date(item.startDate).getMonth();
+        const monthIndex = (startMonth + 1) % 12; // Align with the `months` array
+        if (item.health === 'Tốt') {
+          goodHealth[monthIndex]++;
+        } else {
+          notGoodHealth[monthIndex]++;
+        }
       });
+
+      setChartData({ goodHealth, notGoodHealth });
     }
   }, [data]);
 
@@ -117,14 +137,14 @@ const ChartComponent = ({ data }) => {
 
   const option = {
     title: {
-      text: 'Số lượng Người cao tuổi theo tháng',
+      text: 'Biểu đồ sức khoẻ của các cụ',
     },
     tooltip: {
       trigger: 'axis',
     },
     legend: {
-      data: ['Người cao tuổi đến', 'Người cao tuổi rời đi'],
-      right: 20, // Cấu hình vị trí của legend bên phải
+      data: ['Sức khoẻ tốt', 'Sức khoẻ không tốt'],
+      right: 20,
     },
     grid: {
       left: '3%',
@@ -150,16 +170,16 @@ const ChartComponent = ({ data }) => {
     },
     series: [
       {
-        name: 'Người cao tuổi nội trú',
+        name: 'Sức khoẻ tốt',
         type: 'line',
-        stack: 'Tổng cộng nội trú',
-        data: chartData.Boarding,
+        stack: 'Tổng cộng sức khoẻ tốt',
+        data: chartData.goodHealth,
       },
       {
-        name: 'Người cao tuổi ngoại trú',
+        name: 'Sức khoẻ không tốt',
         type: 'line',
-        stack: 'Tổng cộng ngoại trú',
-        data: chartData.outpatient,
+        stack: 'Tổng cộng sức khoẻ không tốt',
+        data: chartData.notGoodHealth,
       },
     ],
   };
@@ -175,7 +195,7 @@ const CardItem = ({ icon, title, value, increase }) => (
   <div
     className="card--item"
     style={{
-      width: '228px',
+      width: '300px',
       padding: '10px',
       borderRadius: '10px',
       backgroundColor: 'white',
@@ -208,12 +228,14 @@ const CardItem = ({ icon, title, value, increase }) => (
         }}>
         {value}
       </p>
-      <div className="increase" style={{ display: 'flex' }}>
-        <RiseOutlined
-          style={{ fontSize: '16px', color: 'green', marginRight: 10 }}
-        />
-        <span style={{ color: 'green' }}>{increase}</span>
-      </div>
+      {increase && (
+        <div className="increase" style={{ display: 'flex' }}>
+          <RiseOutlined
+            style={{ fontSize: '16px', color: 'green', marginRight: 10 }}
+          />
+          <span style={{ color: 'green' }}>{increase}%</span>
+        </div>
+      )}
     </div>
   </div>
 );
@@ -313,9 +335,9 @@ const Dashboard = () => {
         style={{
           margin: '15px',
           gap: '20px',
-          width: '99%',
           display: 'flex',
           justifyContent: 'space-between',
+          marginRight: 42,
         }}>
         <CardItem
           icon={<UserOutlined style={{ fontSize: '24px' }} />}
@@ -337,9 +359,8 @@ const Dashboard = () => {
         />
         <CardItem
           icon={<UserOutlined style={{ fontSize: '24px' }} />}
-          title="Người cao tuổi xuất viện"
-          value="20"
-          increase="3.8"
+          title="Đánh giá từ người thân"
+          value="5"
         />
       </div>
       <div className="footer--dashboard" style={{ display: 'flex' }}>

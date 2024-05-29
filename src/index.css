@@ -1,5 +1,5 @@
 :root {
-  font-family: 'Mona Sans', sans-serif; /* Thay đổi font-family thành 'Mona Sans' */
+  font-family: 'Mona Sans', sans-serif; 
   line-height: 1.5;
   font-weight: 400;
 
@@ -77,12 +77,12 @@ button:focus-visible {
 }
 
 .sidebar {
-  flex: 0 0 auto; /* Sidebar doesn't grow or shrink */
-  width: 200px; /* Width of the sidebar */
+  flex: 0 0 auto; 
+  width: 200px; 
 }
 
 .content {
-  flex: 1; /* Content expands to fill remaining space */
+  flex: 1; 
 }
 .header {
   width: 100%;

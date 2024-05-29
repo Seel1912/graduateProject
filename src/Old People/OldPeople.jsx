@@ -18,7 +18,8 @@ import { useNavigate } from 'react-router-dom';
 
 const { Option } = Select;
 
-const OldPeople = () => {
+const OldPeople = ({ sensor1Data }) => {
+  console.log(sensor1Data);
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -26,6 +27,7 @@ const OldPeople = () => {
   const [form] = Form.useForm();
   const [filterOption, setFilterOption] = useState('Tất cả');
   const [startDate, setStartDate] = useState(null);
+  const [healthStatus, setHealthStatus] = useState(''); // State to manage health status
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -55,6 +57,7 @@ const OldPeople = () => {
     setEditingKey(record.key);
     setStartDate(record.startDate ? moment(record.startDate) : null);
     setIsModalVisible(true);
+    setHealthStatus(record.health); // Update health status when editing
   };
 
   const handleCancel = () => {
@@ -100,6 +103,10 @@ const OldPeople = () => {
 
   const handleNavigateToDetail = (record) => {
     navigate(`/oldpeople/${record.key}`, { state: { record } });
+  };
+
+  const handleHealthChange = (value) => {
+    setHealthStatus(value); // Update health status state
   };
 
   const columns = [
@@ -235,11 +242,27 @@ const OldPeople = () => {
                     message: 'Vui lòng chọn tình trạng sức khỏe!',
                   },
                 ]}>
-                <Select>
+                <Select onChange={handleHealthChange}>
                   <Option value="Tốt">Tốt</Option>
                   <Option value="Không tốt">Không tốt</Option>
                 </Select>
               </Form.Item>
+              {healthStatus === 'Không tốt' && (
+                <Form.Item
+                  name="sensor"
+                  label="Thiết bị cảm biến"
+                  rules={[
+                    {
+                      required: true,
+                      message: 'Vui lòng chọn thiết bị cảm biến!',
+                    },
+                  ]}>
+                  <Select>
+                    <Option value="default">Không Có</Option>
+                    <Option value="sensordata1">Thiết bị cảm biến 1</Option>
+                  </Select>
+                </Form.Item>
+              )}
               <Form.Item
                 name="room"
                 label="Phòng"

@@ -22,7 +22,7 @@ io.on('connection', (socket) => {
   const userId = socket.id;
 
   const MathTemp = Math.random() * (40 - 35) + 35;
-  const OxyTemp = Math.random() * (100 - 90) + 90;
+  const OxyTemp = Math.random() * (100 - 90) + 80;
 
   userSensorData1[userId] = {
     temperature: MathTemp,
