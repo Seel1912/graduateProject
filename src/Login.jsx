@@ -4,6 +4,7 @@ import { Button, Input, notification, Form, Typography } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import './Auth.css';
 import logo from './assets/logo.png';
+import pic from './assets/pic2.png';
 const { Title } = Typography;
 
 const Login = ({ onLogin }) => {
@@ -84,12 +85,14 @@ const Login = ({ onLogin }) => {
           <ul style={{ padding: 0 }}>
             <li style={{ fontSize: 18, fontWeight: 'bold' }}>Đặng Huy Hoàng</li>
             <li style={{ fontSize: 18, fontWeight: 'bold' }}>Dương Khánh Vy</li>
-            <li style={{ fontSize: 18, fontWeight: 'bold' }}>Nguyễn Đan Hà</li>
+            <li style={{ fontSize: 18, fontWeight: 'bold' }}>
+              Nguyễn Thị Đan Hà
+            </li>
           </ul>
         </div>
       </div>
       <div>
-        <div style={{ position: 'relative', top: '-250px', right: -600 }}>
+        <div style={{ position: 'relative', top: '-340px', right: -700 }}>
           <Form
             name="login"
             className="login-form"
@@ -136,6 +139,18 @@ const Login = ({ onLogin }) => {
             </Form.Item>
           </Form>
         </div>
+        {/* <div>
+          <div
+            className="HeaderImage"
+            style={{
+              position: 'relative',
+              top: -830,
+              width: 400,
+              right: -700,
+            }}>
+            <img src={pic} alt="" style={{ width: '100%' }} />
+          </div>
+        </div> */}
       </div>
     </div>
   );

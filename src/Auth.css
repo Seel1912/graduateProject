@@ -3,8 +3,27 @@
   flex-direction: column;
   align-items: center;
   height: auto;
-  background: #f0f2f5;
+  /* background: #f0f2f5; */
   width: 99vw;
+  overflow: hidden;
+}
+@font-face {
+  font-family: 'Playfair Display';
+  src: url('./assets/PlayfairDisplay-Bold.ttf') format('truetype');
+}
+h2 {
+  font-family: 'Playfair Display', serif;
+}
+.auth-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url(./assets/pic2.png);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .login-form-container {
@@ -22,6 +41,9 @@
 
 .login-form {
   max-width: 300px;
+  background-color: white;
+    padding: 40px;
+    border-radius: 10px;
 }
 .login-form .ant-input:focus {
   background-color: transparent;
