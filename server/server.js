@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
   setInterval(() => {
     userSensorData1[userId] = {
       temperature: Math.random() * (40 - 35) + 35,
-      Oxy: Math.random() * (100 - 90) + 90,
+      Oxy: Math.random() * (100 - 90) + 80,
     };
 
     socket.emit('sensorData', {

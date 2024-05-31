@@ -75,7 +75,7 @@ const App = () => {
   const showNotification = (emergencyData) => {
     notification.error({
       message: 'Alert',
-      description: `Bệnh nhân Nguyễn Văn A đang có vấn đề về tim\nNhịp tim hiện tại: ${emergencyData}`,
+      description: `Bệnh nhân Nguyễn Văn A đang có vấn đề \nNồng độ oxi trong máu: ${emergencyData}`,
       placement: 'topRight',
       duration: 0,
       style: {
@@ -84,7 +84,12 @@ const App = () => {
       },
     });
   };
-
+  useEffect(() => {
+    if (emergencyData < 90) {
+      showNotification(emergencyData);
+    }
+  }, [emergencyData]);
+  console.log(emergencyData);
   const handleLogout = () => {
     localStorage.removeItem('loggedIn');
     setIsLoggedIn(false);
