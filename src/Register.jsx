@@ -33,52 +33,48 @@ const Register = () => {
         <div className="HeaderTitle">
           <h1>Đề Tài Quản Lý Viện Dưỡng Lão</h1>
         </div>
-        <div className="HeaderContent">
-          <h3>Thực hiện bởi</h3>
-          <ul>
-            <li>Đặng Huy Hoàng</li>
-            <li>Dương Khánh Vy</li>
-            <li>Nguyễn Đan Hà</li>
-          </ul>
-        </div>
       </div>
-      <Form
-        name="register"
-        className="login-form"
-        initialValues={{ remember: true }}
-        onFinish={handleRegister}>
-        {' '}
-        {/* Truyền hàm handleRegister vào onFinish */}
-        <Title level={2} className="login-title">
-          Đăng Ký
-        </Title>
-        <Form.Item
-          name="username"
-          rules={[{ required: true, message: 'Hãy điền tên đăng nhập!' }]}>
-          <Input placeholder="Tên đăng nhập" />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          rules={[{ required: true, message: 'Hãy điền mật khẩu!' }]}>
-          <Input.Password placeholder="Mật khẩu" />
-        </Form.Item>
-        <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button">
-            Đăng ký
-          </Button>
-          <div style={{ position: 'relative', right: '-110px' }}>
+      <div
+        className="login-responsive"
+        style={{ position: 'relative', right: -380, top: 50 }}>
+        <Form
+          name="register"
+          className="login-form"
+          initialValues={{ remember: true }}
+          onFinish={handleRegister}>
+          {' '}
+          {/* Truyền hàm handleRegister vào onFinish */}
+          <Title level={2} className="login-title">
+            Đăng Ký
+          </Title>
+          <Form.Item
+            name="username"
+            rules={[{ required: true, message: 'Hãy điền tên đăng nhập!' }]}>
+            <Input placeholder="Tên đăng nhập" />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            rules={[{ required: true, message: 'Hãy điền mật khẩu!' }]}>
+            <Input.Password placeholder="Mật khẩu" />
+          </Form.Item>
+          <Form.Item>
             <Button
-              type="link"
-              onClick={() => navigate('/login')}
-              style={{ marginTop: '10px' }}>
-              Đăng Nhập
+              type="primary"
+              htmlType="submit"
+              className="login-form-button">
+              Đăng ký
             </Button>
-          </div>
-        </Form.Item>
-      </Form>
+            <div style={{ position: 'relative', right: '-110px' }}>
+              <Button
+                type="link"
+                onClick={() => navigate('/login')}
+                style={{ marginTop: '10px' }}>
+                Đăng Nhập
+              </Button>
+            </div>
+          </Form.Item>
+        </Form>
+      </div>
     </div>
   );
 };

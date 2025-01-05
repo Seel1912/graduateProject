@@ -25,6 +25,9 @@ import Nurse from './Nurse/Nurse';
 import Room from './Room/Room';
 import Login from './Login';
 import Register from './Register';
+import Storage from './Store/Storage';
+import Food from './Food/Food';
+import Test from './Test/Test';
 const socket = io('http://localhost:3001', {
   transports: ['websocket'],
   cors: { origin: 'http://localhost:5173', methods: ['GET', 'POST'] },
@@ -71,11 +74,32 @@ const App = () => {
     minute: 'numeric',
     hour12: true,
   });
+  const playSound = () => {
+    const audio = new Audio('/public/sound.mp3');
+    audio.play();
+  };
+  const showNotification = (conditionCode, data, namesString) => {
+    playSound();
+    let description = '';
 
-  const showNotification = (emergencyData) => {
+    switch (conditionCode) {
+      case 1:
+        description = `Người cao tuổi ${namesString} Nhịp tim hiện tại: ${data}`;
+        break;
+      case 2:
+        description = `Người cao tuổi ${namesString} Nồng độ oxi trong máu: ${data}`;
+        break;
+      case 3:
+        description = `Người cao tuổi ${namesString} Alarm: Thông báo té ngã`;
+        break;
+      case 4:
+        description = `Người cao tuổi ${namesString} Nhịp tim hiện tại trên 120: ${data}`;
+        break;
+    }
+
     notification.error({
       message: 'Alert',
-      description: `Bệnh nhân Nguyễn Văn A đang có vấn đề \nNồng độ oxi trong máu: ${emergencyData}`,
+      description,
       placement: 'topRight',
       duration: 0,
       style: {
@@ -84,12 +108,7 @@ const App = () => {
       },
     });
   };
-  useEffect(() => {
-    if (emergencyData < 90) {
-      showNotification(emergencyData);
-    }
-  }, [emergencyData]);
-  console.log(emergencyData);
+
   const handleLogout = () => {
     localStorage.removeItem('loggedIn');
     setIsLoggedIn(false);
@@ -171,7 +190,7 @@ const App = () => {
                 }}>
                 <Avatar size="large" icon={<UserOutlined />} />
                 <p style={{ marginLeft: 10, marginRight: 70 }}>
-                  Đặng Huy Hoàng
+                  Lưu Nguyễn Duy Anh
                 </p>
                 <Button type="primary" onClick={handleLogout}>
                   Đăng xuất
@@ -234,7 +253,7 @@ const App = () => {
                     backgroundColor: 'white',
                   }}
                   key="/storage">
-                  <NavLink to="/oldpeople">Quản lý kho</NavLink>
+                  <NavLink to="/storage">Quản lý kho</NavLink>
                 </Menu.Item>
                 <Menu.Item
                   className="menu-item"
@@ -252,7 +271,7 @@ const App = () => {
                     backgroundColor: 'white',
                   }}
                   key="/food">
-                  <NavLink to="/oldpeople">Quản lý thức ăn</NavLink>
+                  <NavLink to="/food">Quản lý thức ăn</NavLink>
                 </Menu.Item>
               </Menu>
             </div>
@@ -262,11 +281,19 @@ const App = () => {
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/doctor" element={<Doctor />} />
               <Route path="/nurse" element={<Nurse />} />
+              <Route path="/storage" element={<Storage />} />
+              <Route path="/test" element={<Test />} />
               <Route path="/room" element={<Room />} />
+              <Route path="/food" element={<Food />} />
               <Route path="/doctors/:key" element={<DoctorDetail />} />
               <Route
                 path="/oldpeople"
-                element={<OldPeople sensor1Data={sensor1Data} />}
+                element={
+                  <OldPeople
+                    sensor1Data={sensor1Data}
+                    showNotification={showNotification}
+                  />
+                }
               />
               <Route
                 path="/oldpeople/:key"

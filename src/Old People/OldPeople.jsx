@@ -15,11 +15,11 @@ import {
 } from 'antd';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const { Option } = Select;
 
-const OldPeople = ({ sensor1Data }) => {
-  console.log(sensor1Data);
+const OldPeople = ({ sensor1Data, showNotification }) => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -29,7 +29,71 @@ const OldPeople = ({ sensor1Data }) => {
   const [startDate, setStartDate] = useState(null);
   const [healthStatus, setHealthStatus] = useState(''); // State to manage health status
   const navigate = useNavigate();
+  const [sensorData, setSensorData] = useState({});
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          'http://localhost:3000/api/sensorData'
+        );
+        setSensorData(response.data);
+      } catch (error) {
+        console.error('Error fetching sensor data:', error);
+      }
+    };
 
+    const interval = setInterval(() => {
+      fetchData();
+    }, 1000); // Fetch data every 1 second
+
+    return () => clearInterval(interval); // Clean up interval on component unmount
+  }, []);
+  const peopleWithNonDefaultSensor = data.filter(
+    (person) => person.sensor && person.sensor !== 'default'
+  );
+  const namesWithNonDefaultSensor = peopleWithNonDefaultSensor.map(
+    (person) => person.name
+  );
+  const uniqueNames = [...new Set(namesWithNonDefaultSensor)];
+  const namesString = uniqueNames.join(', ');
+  const [prevSensorData, setPrevSensorData] = useState(null);
+  useEffect(() => {
+    const { Bpm, SpO2, Alarm } = sensorData;
+    console.log(Alarm);
+    if (Bpm !== 0 || SpO2 !== 0 || Alarm !== 0) {
+      if (
+        prevSensorData &&
+        JSON.stringify(prevSensorData) === JSON.stringify(sensorData)
+      ) {
+        return; // Dữ liệu mới giống dữ liệu trước đó, không cần gọi lại showNotification
+      }
+
+      if (Bpm < 60 || Bpm > 100 || SpO2 < 90 || Alarm === 1) {
+        let conditionCode = 0;
+        let dataToShow = null;
+
+        if (Bpm < 60 && Bpm > 20) {
+          conditionCode = 1;
+          dataToShow = Bpm;
+        } else if (Bpm > 120) {
+          conditionCode = 1;
+          dataToShow = Bpm;
+        } else if (SpO2 < 90 && SpO2 > 20) {
+          conditionCode = 2;
+          dataToShow = SpO2;
+        } else if (Alarm === 1) {
+          conditionCode = 3;
+        } else if (Bpm > 120) {
+          conditionCode = 4;
+          dataToShow = Bpm;
+        }
+
+        showNotification(conditionCode, dataToShow, namesString);
+      }
+
+      setPrevSensorData(sensorData);
+    }
+  }, [sensorData, prevSensorData, namesString, showNotification]);
   useEffect(() => {
     const savedData = localStorage.getItem('oldPeopleData');
     if (savedData) {

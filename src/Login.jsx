@@ -48,7 +48,9 @@ const Login = ({ onLogin }) => {
   return (
     <div className="auth-container">
       <div>
-        <div style={{ position: 'relative', right: -400, top: 50 }}>
+        <div
+          className="login-responsive"
+          style={{ position: 'relative', right: -400, top: 50 }}>
           <Form
             name="login"
             className="login-form"
